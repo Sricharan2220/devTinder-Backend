@@ -6,8 +6,9 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 
 const app = express();
-app.use(express.json());
+app.use(express.json())
 app.use(cookieParser());
+
 
 app.use("/",authRouter);
 app.use("/",profileRouter);

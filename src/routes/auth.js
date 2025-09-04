@@ -11,6 +11,10 @@ authRouter.post("/signup",async (req,res)=>{
 
         const {firstName,lastName,emailId,password} = req.body;
 
+        const existingUser = await User.findOne({emailId : emailId});
+        if(existingUser){
+            throw new Error("User already Exists, Please Login");
+        }
         // encrypt the password
         const passwordHash = await bcrypt.hash(password,10);
         
@@ -18,7 +22,7 @@ authRouter.post("/signup",async (req,res)=>{
             firstName,lastName,emailId,password: passwordHash,
         });
 
-        user.save();
+        await user.save();
         res.send("User saved Successfully");
     }catch(err){
         res.status(400).send("ERROR : " + err.message);
