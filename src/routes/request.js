@@ -4,6 +4,7 @@ const requestRouter = express.Router();
 const ConnectionRequest = require("../models/connectionRequest");
 const {userAuth} = require("../middlewares/userAuth");
 const User = require("../models/user");
+const sendEmail = require("../utils/sendEmail");
 
 requestRouter.post("/request/send/:status/:toUserId",userAuth,async (req,res)=>{
     try{
@@ -49,6 +50,13 @@ requestRouter.post("/request/send/:status/:toUserId",userAuth,async (req,res)=>{
         switch (status) {
         case "interested":
             message = `${req.user.firstName} has shown interest in ${toUser.firstName}`;
+            // Send email notification
+            try{
+                const emailRes = await sendEmail.run(toUser.firstName,req.user.firstName);
+                console.log("Email sent successfully:", emailRes);
+            } catch (emailError) {
+                console.error("Error sending email:", emailError);
+            }
             break;
 
         case "ignored":
@@ -66,7 +74,7 @@ requestRouter.post("/request/send/:status/:toUserId",userAuth,async (req,res)=>{
 
 
     }catch(err){
-        res.status(400).send("ERROR: " + err.message);
+        res.status(400).json({ message: err.message });
     }
 });
 
