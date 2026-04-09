@@ -17,7 +17,7 @@ authRouter.post("/signup",async (req,res)=>{
         }
         // encrypt the password
         const passwordHash = await bcrypt.hash(password,10);
-        
+ 
         const userData = {
             firstName,
             lastName,
