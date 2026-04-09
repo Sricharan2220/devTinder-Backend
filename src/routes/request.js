@@ -53,7 +53,6 @@ requestRouter.post("/request/send/:status/:toUserId",userAuth,async (req,res)=>{
             // Send email notification
             try{
                 const emailRes = await sendEmail.run(toUser.firstName,req.user.firstName);
-                console.log("Email sent successfully:", emailRes);
             } catch (emailError) {
                 console.error("Error sending email:", emailError);
             }
